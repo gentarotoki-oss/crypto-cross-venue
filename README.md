@@ -54,10 +54,10 @@ Full tables: [reports/tables.md](reports/tables.md).
 ## Reproduce
 
 ```bash
-python -m venv .venv
-.venv/Scripts/pip install pandas numpy scipy matplotlib pyarrow yfinance tabulate   # Windows
+pip install -r requirements.txt
 python src/fetch.py --symbols TSLA MSTR QQQ --start 2026-10-13 --end 2026-10-26
 python src/report.py
+pytest   # unit tests on synthetic data, no download needed
 ```
 
 Data sources (all public): [Binance data](https://data.binance.vision), [Bybit public data](https://public.bybit.com), [OKX historical data](https://www.okx.com/data-download), Yahoo Finance (stocks), Kraken (USDT/USD). Downloaded data goes to `data/` and is not committed.
