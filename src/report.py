@@ -50,8 +50,12 @@ def main() -> None:
     fig, ax = plt.subplots(figsize=(8, 4))
     g = gaps_bps(prices["TSLA"])["binance-okx"]
     sess = session_of(g.index)
+    # Gaps sit on a lattice of price ticks (0.01 USD ≈ 0.27 bps for TSLA), so
+    # bins are centred on tick multiples to avoid empty bins.
+    tick_bps = 1e4 * 0.01 / prices["TSLA"]["binance"].median()
+    edges = (np.arange(-40, 41) + 0.5) * tick_bps
     for name in ("regular", "weekend"):
-        ax.hist(g[sess == name].dropna(), bins=np.arange(-10, 10.25, 0.25), alpha=0.6, density=True, label=name)
+        ax.hist(g[sess == name].dropna(), bins=edges, alpha=0.6, density=True, label=name)
     ax.set(xlabel="Binance − OKX (bps)", ylabel="density", title="TSLA perp: gap between Binance and OKX")
     ax.legend()
     fig.tight_layout()
